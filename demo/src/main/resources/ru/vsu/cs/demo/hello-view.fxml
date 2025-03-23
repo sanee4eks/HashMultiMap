@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<SplitPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="ru.vsu.cs.demo.HelloController"
+           dividerPositions="0.3"
+           style="-fx-background-color: #f5f5f5;">
+    <items>
+        <!-- Меню -->
+        <MenuBar>
+            <Menu text="Мапа">
+                <MenuItem text="Проверить пустоту" onAction="#onIsEmptyCheck"/>
+                <MenuItem text="Проверить ключ" onAction="#onContainsKeyCheck"/>
+                <MenuItem text="Проверить значение" onAction="#onContainsValueCheck"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Получить ключи" onAction="#onGetKeySet"/>
+                <MenuItem text="Получить записи" onAction="#onGetEntrySet"/>
+            </Menu>
+
+            <Menu text="Операции">
+                <MenuItem text="Добавить все из другой мапы" onAction="#onPutAllMap"/>
+                <MenuItem text="Добавить все из Map" onAction="#onPutAllJavaMap"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Заменить значения" onAction="#onReplaceValues"/>
+                <MenuItem text="Добавить значения" onAction="#onAddValues"/>
+            </Menu>
+        </MenuBar>
+
+        <!-- Левая панель управления -->
+        <VBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 20;">
+            <!-- Форма ввода -->
+            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 10; -fx-border-radius: 5; -fx-border-color: lightgray;">
+                <Label text="Ключ:" style="-fx-font-size: 12;"/>
+                <TextField fx:id="keyField" promptText="Введите ключ" style="-fx-padding: 5;"/>
+
+                <Label text="Значение:" style="-fx-font-size: 12;"/>
+                <TextField fx:id="valueField" promptText="Введите значение" style="-fx-padding: 5;"/>
+            </VBox>
+
+            <!-- Панель кнопок -->
+            <HBox spacing="10">
+                <Button text="Добавить" onAction="#onAddClick"
+                        style="-fx-background-color: #2196f3; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 12;"/>
+                <Button text="Удалить значение" onAction="#onRemoveClick"
+                        style="-fx-background-color: #ff5252; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 12;"/>
+                <Button text="Удалить ключ" onAction="#onRemoveKey"
+                        style="-fx-background-color: #9c27b0; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 12;"/>
+                <Button text="Очистить мапу" onAction="#onClearClick"
+                        style="-fx-background-color: #27b075; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 12;"/>
+            </HBox>
+
+            <!-- Панель статуса -->
+            <HBox spacing="10">
+                <Label fx:id="statusLabel" text="Статус: готово" style="-fx-font-size: 12;"/>
+                <ProgressIndicator fx:id="statusProgress" visible="false" progress="0"
+                                   style="-fx-progress-color: #2196f3;" maxWidth="20"/>
+            </HBox>
+
+            <!-- Панель мапы -->
+            <ScrollPane fx:id="mapScrollPane" prefHeight="200">
+                <content>
+                    <Label fx:id="mapLabel" text="Текущая мапа:"/>
+                </content>
+            </ScrollPane>
+
+            <!-- Дополнительные кнопки -->
+            <HBox spacing="10">
+                <Button text="Сохранить" onAction="#onSaveClick"
+                        style="-fx-background-color: #ff9800; -fx-text-fill: white;"/>
+                <Button text="Загрузить" onAction="#onLoadClick"
+                        style="-fx-background-color: #03a9f4; -fx-text-fill: white;"/>
+                <Button text="Стиль графа" onAction="#onStyleClick"
+                        style="-fx-background-color: #673ab7; -fx-text-fill: white;"/>
+            </HBox>
+        </VBox>
+
+        <!-- Правая панель графа -->
+        <AnchorPane>
+            <!-- Граф -->
+            <ScrollPane fx:id="graphScrollPane" fitToWidth="true" fitToHeight="true">
+                <content>
+                    <ImageView fx:id="graphView" preserveRatio="true"/>
+                </content>
+            </ScrollPane>
+
+            <!-- Индикатор загрузки графа -->
+            <ProgressIndicator fx:id="graphProgress" visible="false"
+                               AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="0.0"
+                               AnchorPane.topAnchor="0.0"
+                               AnchorPane.bottomAnchor="0.0"/>
+        </AnchorPane>
+    </items>
+</SplitPane>
