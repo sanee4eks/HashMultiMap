@@ -179,7 +179,10 @@ public class HashMultiMap<K, V> implements Serializable {
         Set<Map.Entry<K, Collection<V>>> entrySet = new HashSet<>();
         for (Entry<K, V> entry : table) {
             while (entry != null) {
-                entrySet.add(new AbstractMap.SimpleEntry<>(entry.key, Collections.unmodifiableCollection(entry.values)));
+                entrySet.add(new AbstractMap.SimpleImmutableEntry<>(
+                        entry.key,
+                        Collections.unmodifiableCollection(entry.values)
+                ));
                 entry = entry.next;
             }
         }
@@ -215,24 +218,38 @@ public class HashMultiMap<K, V> implements Serializable {
     }
 
     public void replaceAllValues(K key, Collection<V> values) {
+        if (values == null || values.isEmpty()) {
+            removeKey(key);
+            return;
+        }
+
         int index = hash(key);
         Entry<K, V> current = table[index];
+        Entry<K, V> prev = null;
+
         while (current != null) {
             if (Objects.equals(current.key, key)) {
                 current.values.clear();
                 current.values.addAll(values);
                 return;
             }
+            prev = current;
             current = current.next;
         }
+
         Entry<K, V> newEntry = new Entry<>(key, values.iterator().next(), table[index]);
+        newEntry.values.clear();
         newEntry.values.addAll(values);
         table[index] = newEntry;
+        size++;
     }
 
     public void addAllValues(K key, Collection<V> values) {
+        if (values == null || values.isEmpty()) return;
+
         int index = hash(key);
         Entry<K, V> current = table[index];
+
         while (current != null) {
             if (Objects.equals(current.key, key)) {
                 current.values.addAll(values);
@@ -240,9 +257,15 @@ public class HashMultiMap<K, V> implements Serializable {
             }
             current = current.next;
         }
+
         Entry<K, V> newEntry = new Entry<>(key, values.iterator().next(), table[index]);
-        newEntry.values.addAll(values);
+        for (V value : values) {
+            if (!newEntry.values.contains(value)) {
+                newEntry.values.add(value);
+            }
+        }
         table[index] = newEntry;
+        size++;
     }
 
     @Override

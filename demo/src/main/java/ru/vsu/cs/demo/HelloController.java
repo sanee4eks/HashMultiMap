@@ -128,7 +128,7 @@ public class HelloController {
                         graphvizGenerator.setGraphStyle(br.readLine());
                     }
                     System.out.println("Загрузка успешна");
-                    return null; // Это и есть missing return statement
+                    return null;
                 } catch (Exception e) {
                     System.err.println("Ошибка при загрузке:");
                     e.printStackTrace();

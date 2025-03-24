@@ -1,3 +1,1 @@
 digraph G {
-rankdir=LB;
-node[shape=box];
